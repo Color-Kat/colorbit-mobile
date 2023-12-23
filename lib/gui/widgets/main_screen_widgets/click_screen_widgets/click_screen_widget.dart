@@ -11,12 +11,18 @@ class ClickScreenWidget extends StatefulWidget {
 }
 
 
-class _ClickScreenWidgetState extends State<ClickScreenWidget> {
+class _ClickScreenWidgetState extends State<ClickScreenWidget>
+    with SingleTickerProviderStateMixin{
+  late AnimationController _controller;
 
   @override
   void initState() {
     Future.delayed(Duration.zero, () => _showAlertDialog());
     context.read<ScoreDataModel>().initScoreData();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 150),
+      vsync: this,
+    );
     super.initState();
   }
 
@@ -29,12 +35,9 @@ class _ClickScreenWidgetState extends State<ClickScreenWidget> {
         preferredSize: const Size.fromHeight(60),
         child: AppBar(
           backgroundColor: const Color.fromARGB(255, 18, 18, 18),
-          title: const Text(
-            'COLOR bit',
-            style: TextStyle(
-              color: Colors.red,
-              fontFamily: "Inter-Black",
-            ),
+          title: Image.asset(
+            'assets/images/logos/appbar_logo.png',
+            width: 120,
           ),
           actions: [
             Container(
@@ -43,7 +46,8 @@ class _ClickScreenWidgetState extends State<ClickScreenWidget> {
                 '${context.watch<ScoreDataModel>().getScore().toString()} ETH',
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 20
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold
                 ),
               ),
             )
@@ -55,57 +59,65 @@ class _ClickScreenWidgetState extends State<ClickScreenWidget> {
             color: Color.fromARGB(255, 43, 43, 43)
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              flex: 30,
-              child: Container(
-                alignment: Alignment.center,
-                child: const Text(
-                  'Нажмите на видеокарту, чтобы заработать 1 ETH',
-                  style: TextStyle(
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(bottom: 70),
+              child: Text(
+                'Нажмите на видеокарту, чтобы заработать ${context.watch<ScoreDataModel>().getCurrentCard().id + 1} ETH',
+                style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.bold
-                  ),
-                  textAlign: TextAlign.center,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(
+              height: 380,
+              width: 380,
+              child: InkWell(
+                onTap: () {
+                  _controller.forward();
+                  Future.delayed(const Duration(milliseconds: 200), () {
+                    context.read<ScoreDataModel>().updateScoreOnCardClick();
+                    _controller.reverse();
+                  });
+                },
+                borderRadius: BorderRadius.circular(300),
+                child: ScaleTransition(
+                  scale: Tween<double>(
+                    begin: 1.0,
+                    end: 0.96,
+                  ).animate(_controller),
+                  child: item(context),
                 ),
               )
             ),
-            Expanded(
-              flex: 80,
-              child: Container(
-                padding: const EdgeInsets.only(
-                  left: 10,
-                  right: 10,
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(top: 80),
+              child: ElevatedButton(
+                onPressed: () {
+                  context.read<ScoreDataModel>().updateCard(context);
+                },
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)
+                    ),
+                    backgroundColor: Colors.red,
+                    minimumSize: const Size(300, 50)
                 ),
-                child: item(context)
-              )
-            ),
-            Expanded(
-                flex: 30,
-                child: Container(
-                  alignment: Alignment.center,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      context.read<ScoreDataModel>().updateCard(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30)
-                      ),
-                      backgroundColor: Colors.red,
-                      minimumSize: const Size(300, 50)
-                    ),
-                    child: const Text(
-                      'Улучшить',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold
-                      ),
-                    ),
+                child: Text(
+                  'Улучшить за ${context.watch<ScoreDataModel>().getCurrentCard().price} ETN',
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold
                   ),
-                )
+                ),
+              ),
             ),
           ],
         ),
@@ -116,37 +128,33 @@ class _ClickScreenWidgetState extends State<ClickScreenWidget> {
   Widget item(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      child: InkWell(
-        onTap: () {
-          context.read<ScoreDataModel>().updateScoreOnCardClick();
-        },
-        splashColor: Colors.white,
-        borderRadius: BorderRadius.circular(300),
-        child: Container(
-          width: 400,
-          height: 400,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(300),
-            color: const Color.fromARGB(255, 18, 18, 18),
-            border: Border.all(
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(300),
+          color: const Color.fromARGB(255, 18, 18, 18),
+          border: Border.all(
               width: 3,
               color: Colors.red
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFFFF0000).withAlpha(60),
-                blurRadius: 40.0,
-                spreadRadius: 0.0,
-                offset: const Offset(0.0, 3.0,),
-              ),
-            ],
           ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFFFF0000).withAlpha(60),
+              blurRadius: 40.0,
+              spreadRadius: 0.0,
+              offset: const Offset(0.0, 3.0,),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(300),
           child: Image.asset(
             context.watch<ScoreDataModel>().getCurrentCard().imageRef,
-            fit: BoxFit.contain,
+            alignment: Alignment.center,
+            height: 380,
+            width: 380,
           ),
-        ),
+        )
       ),
     );
   }
@@ -162,7 +170,7 @@ class _ClickScreenWidgetState extends State<ClickScreenWidget> {
             child: ListBody(
               children: <Widget>[
                 Text('Кажется ваше устройство находится не в сети.'),
-                Text('Проверьте подключение к интернету и перезапустите приложение.'),
+                Text('Проверьте подключение к интернету.'),
               ],
             ),
           ),
@@ -204,7 +212,7 @@ SnackBar getSnackBar(String snackBarMessage) {
       ),
     ),
     backgroundColor: Colors.black54,
-    margin: const EdgeInsets.only(left: 110, right: 110, bottom: 120),
+    margin: const EdgeInsets.only(left: 110, right: 110, bottom: 130),
   );
 
   return snackBar;

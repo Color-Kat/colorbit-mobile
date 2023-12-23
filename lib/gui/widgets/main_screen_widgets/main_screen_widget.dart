@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:clicker/gui/widgets/main_screen_widgets/click_screen_widgets/click_screen_widget.dart';
 import 'package:clicker/gui/widgets/main_screen_widgets/webview_screen_widget/webview_screen_container.dart';
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class MainScreenWidget extends StatefulWidget {
   const MainScreenWidget({super.key});
@@ -12,44 +13,47 @@ class MainScreenWidget extends StatefulWidget {
 }
 
 class _MainScreenWidgetState extends State<MainScreenWidget> {
-  late Future<bool> _internetFuture;
+  Widget? screen;
+  late final listener;
+
   @override
   void initState() {
-    _internetFuture = internet();
+    listener = InternetConnection().onStatusChange.listen((InternetStatus status) {
+      switch (status) {
+        case InternetStatus.connected:
+          setState(() {
+            screen = WebViewScreenWidget();
+          });
+          break;
+        case InternetStatus.disconnected:
+          setState(() {
+            screen = const ClickScreenWidget();
+          });
+          break;
+      }
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    listener.cancel();
+    super.dispose();
   }
 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.red,
-      body: FutureBuilder(
-        future: _internetFuture,
-        builder: (context, snapshot) {
-          if(snapshot.hasData && snapshot.data != null) {
-            if(snapshot.data == true) {
-              return WebViewScreenWidget();
-            } else {
-              return const ClickScreenWidget();
-            }
-          }
-          return const CircularProgressIndicator();
-        },
-      ),
-    );
-  }
-
-  Future<bool> internet() async {
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        return true;
-      } else {
-        return false;
-      }
-    } on SocketException catch (_) {
-      return false;
+    if(screen == null) {
+      return Container(
+        alignment: Alignment.center,
+        decoration: const BoxDecoration(
+          color: Color.fromARGB(255, 43, 43, 43),
+        ),
+        child: const CircularProgressIndicator()
+      );
+    } else {
+      return screen!;
     }
   }
 }

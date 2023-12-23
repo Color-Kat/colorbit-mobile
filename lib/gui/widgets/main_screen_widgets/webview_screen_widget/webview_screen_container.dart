@@ -11,7 +11,19 @@ class WebViewScreenWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WebViewWidget(controller: controller),
+      body: WillPopScope(
+        onWillPop: () async {
+          if(await controller.canGoBack()) {
+            controller.goBack();
+            return false;
+          } else {
+            return true;
+          }
+        },
+        child: WebViewWidget(
+          controller: controller,
+        ),
+      ),
     );
   }
 }
