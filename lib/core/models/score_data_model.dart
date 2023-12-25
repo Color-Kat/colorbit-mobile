@@ -1,5 +1,5 @@
-import 'package:clicker/core/controllers/shared_preferences_controller.dart';
-import 'package:clicker/gui/widgets/main_screen_widgets/click_screen_widgets/click_screen_widget.dart';
+import 'package:colorbit/core/controllers/shared_preferences_controller.dart';
+import 'package:colorbit/gui/widgets/main_screen_widgets/click_screen_widgets/click_screen_widget.dart';
 import 'package:flutter/cupertino.dart';
 import '../../data/entities/video_card.dart';
 
@@ -11,7 +11,7 @@ class ScoreDataModel extends ChangeNotifier {
     id: 0,
     name: 'AMD Radeon RX 550 Red Dragon',
     imageRef: 'assets/images/videocards/vc_0.png',
-    price: 100,
+    price: 170,
   );
   final List<VideoCard> _videoCardList = [
     VideoCard(
@@ -72,25 +72,25 @@ class ScoreDataModel extends ChangeNotifier {
       id: 9,
       name: 'ASUS TURBO GeForce RTX 3070',
       imageRef: 'assets/images/videocards/vc_9.png',
-      price: 1498,
+      price: 1499,
     ),
     VideoCard(
       id: 10,
       name: 'GIGABYTE Radeon RX 7900 XT GAMING',
       imageRef: 'assets/images/videocards/vc_10.png',
-      price: 1721,
+      price: 1719,
     ),
     VideoCard(
       id: 11,
       name: 'KFA2 GeForce RTX 4070 Ti ST',
       imageRef: 'assets/images/videocards/vc_11.png',
-      price: 1982,
+      price: 2499,
     ),
     VideoCard(
       id: 12,
       name: 'Palit GeForce RTX 4090 GameRock',
       imageRef: 'assets/images/videocards/vc_12.png',
-      price: 2065,
+      price: 3599,
     ),
   ];
 
@@ -110,7 +110,9 @@ class ScoreDataModel extends ChangeNotifier {
     } else if(_currentListIndex != _videoCardList.length - 1) {
       showSnackBar(context, 'Недостаточно ETH');
     } else {
-      showSnackBar(context, 'Вы достигли максимального уровня');
+      showSnackBar(context, 'Вы достигли максимального уровня. Ваш прогресс сброшен.');
+      _currentListIndex = 0;
+      _score = 0;
     }
     _currentVideoCard = _videoCardList[_currentListIndex];
     notifyListeners();

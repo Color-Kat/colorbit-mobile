@@ -169,8 +169,9 @@ class _ClickScreenWidgetState extends State<ClickScreenWidget>
           content: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Кажется ваше устройство находится не в сети.'),
                 Text('Проверьте подключение к интернету.'),
+                Text('Пока Вы не в сети, вам'),
+                Text('доступна Игра-кликер.'),
               ],
             ),
           ),

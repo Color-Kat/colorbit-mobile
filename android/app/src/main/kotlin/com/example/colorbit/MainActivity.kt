@@ -1,4 +1,4 @@
-package com.example.clicker
+package com.example.colorbit
 
 import io.flutter.embedding.android.FlutterActivity
 

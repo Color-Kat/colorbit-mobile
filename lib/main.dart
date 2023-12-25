@@ -1,5 +1,5 @@
-import 'package:clicker/core/models/score_data_model.dart';
-import 'package:clicker/gui/widgets/main_screen_widgets/main_screen_widget.dart';
+import 'package:colorbit/core/models/score_data_model.dart';
+import 'package:colorbit/gui/widgets/main_screen_widgets/main_screen_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';

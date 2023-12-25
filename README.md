@@ -1,4 +1,4 @@
-# clicker
+# Colorbit
 
 A new Flutter project.
 

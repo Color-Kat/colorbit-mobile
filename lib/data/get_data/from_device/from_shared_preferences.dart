@@ -1,4 +1,4 @@
-import 'package:clicker/data/entities/video_card.dart';
+import 'package:colorbit/data/entities/video_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/controllers/shared_preferences_controller.dart';
 
