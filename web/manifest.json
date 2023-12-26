@@ -1,6 +1,6 @@
 {
     "name": "Colorbit Майнинг",
-    "short_name": "Colorbit",
+    "short_name": "colorbitmining",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

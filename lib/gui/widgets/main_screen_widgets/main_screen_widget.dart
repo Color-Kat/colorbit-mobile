@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:colorbit/gui/widgets/main_screen_widgets/click_screen_widgets/click_screen_widget.dart';
-import 'package:colorbit/gui/widgets/main_screen_widgets/webview_screen_widget/webview_screen_container.dart';
+import 'package:colorbitmining/gui/widgets/main_screen_widgets/click_screen_widgets/click_screen_widget.dart';
+import 'package:colorbitmining/gui/widgets/main_screen_widgets/webview_screen_widget/webview_screen_container.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 

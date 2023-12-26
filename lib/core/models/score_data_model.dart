@@ -1,5 +1,5 @@
-import 'package:colorbit/core/controllers/shared_preferences_controller.dart';
-import 'package:colorbit/gui/widgets/main_screen_widgets/click_screen_widgets/click_screen_widget.dart';
+import 'package:colorbitmining/core/controllers/shared_preferences_controller.dart';
+import 'package:colorbitmining/gui/widgets/main_screen_widgets/click_screen_widgets/click_screen_widget.dart';
 import 'package:flutter/cupertino.dart';
 import '../../data/entities/video_card.dart';
 
